@@ -20,20 +20,20 @@ locals {
 # this will trigger the delegated cognito terraform pipeline and and apply the config.
 resource "aws_s3_bucket_object" "delegated-cognito-config" {
   bucket = var.cognito_central_bucket
-  key    = "${length(var.cognito_central_env)>0 ? var.cognito_central_env : var.environment}/${local.current_account_id}/${var.name_prefix}-${var.service_name}.json"
+  key    = "${length(var.cognito_central_env) > 0 ? var.cognito_central_env : var.environment}/${local.current_account_id}/${var.name_prefix}-${var.application_name}.json"
   acl    = "bucket-owner-full-control"
 
   content = jsonencode({
     # Configure a user pool client
     user_pool_client = {
-      name_prefix     = "${var.name_prefix}-${var.service_name}"
+      name_prefix     = "${var.name_prefix}-${var.application_name}"
       generate_secret = false
 
-      allowed_oauth_flows                  = var.app_client_flows
-      allowed_oauth_scopes                 = var.app_client_scopes
+      allowed_oauth_flows                  = var.app_oauth_flows
+      allowed_oauth_scopes                 = var.app_oauth_scopes
       allowed_oauth_flows_user_pool_client = true
       supported_identity_providers         = var.supported_identity_providers
-      callback_url = var.callback_urls
+      callback_url                         = var.callback_urls
     }
   })
   content_type = "application/json"
@@ -60,7 +60,7 @@ resource "time_sleep" "wait_for_credentials" {
 # The client credentials that are stored in Central Cognito.
 data "aws_secretsmanager_secret_version" "microservice_client_credentials" {
   depends_on = [aws_s3_bucket_object.delegated-cognito-config[0], time_sleep.wait_for_credentials[0]]
-  secret_id = "arn:aws:secretsmanager:eu-west-1:${var.cognito_central_account_id}:secret:${local.current_account_id}-${var.name_prefix}-${var.service_name}"
+  secret_id  = "arn:aws:secretsmanager:eu-west-1:${var.cognito_central_account_id}:secret:${local.current_account_id}-${var.name_prefix}-${var.application_name}"
 }
 
 
