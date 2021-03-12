@@ -39,11 +39,6 @@ variable "cognito_central_account_id" {
   type        = string
 }
 
-variable "cognito_central_user_pool_id" {
-  description = " The ID of the User Pool in central cognito to create resource server and app client in."
-  type        = string
-}
-
 variable "supported_identity_providers" {
   description = "List of provider names for the identity providers that are supported on this client."
   type        = list(string)
