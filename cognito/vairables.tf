@@ -55,12 +55,11 @@ variable "tags" {
 
 variable "create_resource_server" {
   description = "Create resource server in Cognito for microservice."
-  default     = true
+  default     = false
   type        = bool
 }
 
 variable "create_app_client" {
   description = "Create application client in Cognito for microservice."
-  default     = false
   type        = bool
 }
