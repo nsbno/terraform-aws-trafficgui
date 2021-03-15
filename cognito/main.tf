@@ -51,6 +51,7 @@ resource "aws_s3_bucket_object" "delegated-cognito-config" {
 # The sleep wait will only occur when the dependent S3 file is updated
 # and during normal operation without changes it will not pause here.
 resource "time_sleep" "wait_for_credentials" {
+  count = var.create_app_client ? 1 : 0
   create_duration = "300s"
 
   triggers = {
