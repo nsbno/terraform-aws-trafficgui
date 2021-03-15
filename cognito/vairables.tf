@@ -53,3 +53,8 @@ variable "tags" {
   type = map(string)
 }
 
+variable "create_resource_server" {
+  description = "Create resource server in Cognito for microservice."
+  default     = true
+  type        = bool
+}

@@ -19,6 +19,7 @@ locals {
 # upload delegated cognito config to S3 bucket.
 # this will trigger the delegated cognito terraform pipeline and and apply the config.
 resource "aws_s3_bucket_object" "delegated-cognito-config" {
+  count      = var.create_resource_server ? 1 : 0
   bucket = var.cognito_central_bucket
   key    = "${length(var.cognito_central_override_env) > 0 ? var.cognito_central_override_env : var.environment}/${local.current_account_id}/${var.name_prefix}-${var.application_name}.json"
   acl    = "bucket-owner-full-control"
