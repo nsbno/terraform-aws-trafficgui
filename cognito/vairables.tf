@@ -58,3 +58,9 @@ variable "create_resource_server" {
   default     = true
   type        = bool
 }
+
+variable "create_app_client" {
+  description = "Create application client in Cognito for microservice."
+  default     = false
+  type        = bool
+}
