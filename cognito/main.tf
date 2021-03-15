@@ -63,5 +63,16 @@ data "aws_secretsmanager_secret_version" "microservice_client_credentials" {
   secret_id  = "arn:aws:secretsmanager:eu-west-1:${var.cognito_central_account_id}:secret:${local.current_account_id}-${var.name_prefix}-${var.application_name}"
 }
 
+# Store client credentials from Central Cognito in SSM so that the application can read it.
+resource "aws_ssm_parameter" "central_client_id" {
+  name      =  "/${var.name_prefix}/config/${var.application_name}/cognito.clientId"
+  type      = "SecureString"
+  value     = jsondecode(data.aws_secretsmanager_secret_version.microservice_client_credentials[0].secret_string)["client_id"]
+  overwrite = true
 
+  # store the hash as a tag to establish a dependency to the wait_for_credentials resource
+  tags      = merge(var.tags, {
+    config_hash: time_sleep.wait_for_credentials[0].triggers.config_hash
+  })
+}
 

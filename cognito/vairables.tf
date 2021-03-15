@@ -49,3 +49,7 @@ variable "callback_urls" {
   type        = list(string)
 }
 
+variable "tags" {
+  type = map(string)
+}
+
