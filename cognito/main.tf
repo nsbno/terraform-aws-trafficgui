@@ -35,11 +35,6 @@ resource "aws_s3_bucket_object" "delegated-cognito-config" {
       allowed_oauth_flows_user_pool_client = true
       supported_identity_providers         = var.supported_identity_providers
       callback_urls                        = var.callback_urls
-      //for testing purposes
-      access_token_validity = 5
-      token_validity_units = {
-        access_token = "minutes"
-      }
     }
   })
   content_type = "application/json"
