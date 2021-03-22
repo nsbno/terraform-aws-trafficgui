@@ -29,7 +29,7 @@ variable "cognito_central_bucket" {
 }
 
 variable "cognito_central_override_env" {
-  description = " Override which env to upload to for delegated cognito, default is the \"envirnment\"-variable."
+  description = " Override which env to upload to for delegated cognito, default is the \"environment\"-variable."
   type        = string
   default     = ""
 }
