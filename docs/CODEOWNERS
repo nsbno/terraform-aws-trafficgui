@@ -1,0 +1,15 @@
+##
+#
+#  The format of this file is described here:
+#  https://docs.github.com/articles/about-codeowners
+#
+#  The default is to add all members of the team
+#  "traffic-info-owners" (which includes all developers
+#  on the team) on all changes.
+#
+#  If you'd like to review only a subset of changes,
+#  simply add more specific rules tied to your user.
+#
+##
+
+* @nsbno/traffic-gui-owners

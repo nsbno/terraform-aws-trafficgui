@@ -49,6 +49,12 @@ variable "callback_urls" {
   type        = list(string)
 }
 
+variable "logout_urls" {
+  description = "List of allowed logout URLs for the identity provider"
+  type        = list(string)
+}
+
+
 variable "tags" {
   type = map(string)
 }
