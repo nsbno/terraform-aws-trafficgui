@@ -35,6 +35,7 @@ resource "aws_s3_bucket_object" "delegated-cognito-config" {
       allowed_oauth_flows_user_pool_client = true
       supported_identity_providers         = var.supported_identity_providers
       callback_urls                        = var.callback_urls
+      logout_urls                          = var.logout_urls
     }
   })
   content_type = "application/json"
