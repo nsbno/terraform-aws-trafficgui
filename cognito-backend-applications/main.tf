@@ -30,7 +30,7 @@ resource "aws_s3_bucket_object" "delegated-cognito-config" {
       name_prefix     = "${var.name_prefix}-${var.application_name}"
       generate_secret = false
 
-      allowed_oauth_flows                  = ["client_credentials"]
+      allowed_oauth_flows                  = var.app_oauth_flows
       allowed_oauth_scopes                 = var.app_oauth_scopes
       allowed_oauth_flows_user_pool_client = true
     }

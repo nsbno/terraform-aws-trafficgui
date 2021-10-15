@@ -16,6 +16,12 @@ variable "app_oauth_scopes" {
   type        = list(string)
 }
 
+variable "app_oauth_flows" {
+  description = "List of allowed OAuth flows (code, implicit, client_credentials)."
+  type        = list(string)
+  default     = ["client_credentials"]
+}
+
 variable "cognito_central_bucket" {
   description = "(Optional) Configure where to upload delegated cognito config. Default is vydev-delegated-cognito-staging."
   type        = string

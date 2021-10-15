@@ -11,7 +11,6 @@ variable "environment" {
   type        = string
 }
 
-
 variable "app_oauth_scopes" {
   description = "List of allowed OAuth scopes (phone, email, openid, profile, and aws.cognito.signin.user.admin)."
   type        = list(string)
@@ -20,6 +19,7 @@ variable "app_oauth_scopes" {
 variable "app_oauth_flows" {
   description = "List of allowed OAuth flows (code, implicit, client_credentials)."
   type        = list(string)
+  default     = ["code"]
 }
 
 variable "cognito_central_bucket" {
