@@ -62,14 +62,3 @@ variable "logout_urls" {
 variable "tags" {
   type = map(string)
 }
-
-variable "create_resource_server" {
-  description = "Create resource server in Cognito for microservice."
-  default     = false
-  type        = bool
-}
-
-variable "create_app_client" {
-  description = "Create application client in Cognito for microservice."
-  type        = bool
-}

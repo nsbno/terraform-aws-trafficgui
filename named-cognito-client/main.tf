@@ -15,8 +15,7 @@ locals {
 
 # upload delegated cognito config to S3 bucket.
 # this will trigger the delegated cognito terraform pipeline and and apply the config.
-resource "aws_s3_bucket_object" "delegated-cognito-config" {
-  count  = var.create_resource_server ? 1 : 0
+resource "aws_s3_bucket_object" "delegated-cognito-config" {  
   bucket = var.cognito_central_bucket
   key    = "${length(var.cognito_central_override_env) > 0 ? var.cognito_central_override_env : var.environment}/${local.current_account_id}/${var.name_prefix}-${var.application_name}-${var.app_client_name}.json"
   acl    = "bucket-owner-full-control"
@@ -48,8 +47,7 @@ resource "aws_s3_bucket_object" "delegated-cognito-config" {
 # configuration of resource server and application client in delegated cognito.
 # The sleep wait will only occur when the dependent S3 file is updated
 # and during normal operation without changes it will not pause here.
-resource "time_sleep" "wait_for_credentials" {
-  count           = var.create_app_client ? 1 : 0
+resource "time_sleep" "wait_for_credentials" {  
   create_duration = "300s"
 
   triggers = {
