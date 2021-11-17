@@ -1,5 +1,8 @@
+.idea
+
 # Local .terraform directories
 **/.terraform/*
+terraform-aws-trafficgui.iml
 
 # .tfstate files
 *.tfstate
