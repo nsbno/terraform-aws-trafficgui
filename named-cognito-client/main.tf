@@ -63,7 +63,7 @@ data "aws_secretsmanager_secret_version" "microservice_client_credentials" {
 
 # Store client credentials from Central Cognito in SSM so that the application can read it.
 resource "aws_ssm_parameter" "central_client_id" {
-  name      = "/${var.name_prefix}/config/${var.application_name}/cognito.${var.app_client_name}-clientId"
+  name      = "/${var.application_name}/config/cognito.${var.app_client_name}-clientId"
   type      = "SecureString"
   value     = jsondecode(data.aws_secretsmanager_secret_version.microservice_client_credentials.secret_string)["client_id"]
   overwrite = true
