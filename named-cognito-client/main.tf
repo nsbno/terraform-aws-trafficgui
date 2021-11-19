@@ -15,7 +15,7 @@ locals {
 
 # upload delegated cognito config to S3 bucket.
 # this will trigger the delegated cognito terraform pipeline and and apply the config.
-resource "aws_s3_bucket_object" "delegated-cognito-config" {  
+resource "aws_s3_bucket_object" "delegated-cognito-config" {
   bucket = var.cognito_central_bucket
   key    = "${length(var.cognito_central_override_env) > 0 ? var.cognito_central_override_env : var.environment}/${local.current_account_id}/${var.name_prefix}-${var.application_name}-${var.app_client_name}.json"
   acl    = "bucket-owner-full-control"
@@ -47,31 +47,30 @@ resource "aws_s3_bucket_object" "delegated-cognito-config" {
 # configuration of resource server and application client in delegated cognito.
 # The sleep wait will only occur when the dependent S3 file is updated
 # and during normal operation without changes it will not pause here.
-resource "time_sleep" "wait_for_credentials" {  
+resource "time_sleep" "wait_for_credentials" {
   create_duration = "300s"
 
   triggers = {
-    config_hash = sha1(aws_s3_bucket_object.delegated-cognito-config[0].content)
+    config_hash = sha1(aws_s3_bucket_object.delegated-cognito-config.content)
   }
 }
 
 # The client credentials that are stored in Central Cognito.
 data "aws_secretsmanager_secret_version" "microservice_client_credentials" {
-  depends_on = [aws_s3_bucket_object.delegated-cognito-config[0], time_sleep.wait_for_credentials[0]]
-  count      = var.create_app_client ? 1 : 0
+  depends_on = [aws_s3_bucket_object.delegated-cognito-config, time_sleep.wait_for_credentials]
   secret_id  = "arn:aws:secretsmanager:eu-west-1:${var.cognito_central_account_id}:secret:${local.current_account_id}-${var.name_prefix}-${var.application_name}-${var.app_client_name}-id"
 }
 
 # Store client credentials from Central Cognito in SSM so that the application can read it.
 resource "aws_ssm_parameter" "central_client_id" {
-  name      = "/${var.name_prefix}/config/${var.application_name}/cognito.${var.app_client_name}-clientId"
+  name      = "/${var.application_name}/config/application/cognito.${var.app_client_name}-clientId"
   type      = "SecureString"
-  value     = jsondecode(data.aws_secretsmanager_secret_version.microservice_client_credentials[0].secret_string)["client_id"]
+  value     = jsondecode(data.aws_secretsmanager_secret_version.microservice_client_credentials.secret_string)["client_id"]
   overwrite = true
 
   # store the hash as a tag to establish a dependency to the wait_for_credentials resource
   tags = merge(var.tags, {
-    config_hash : time_sleep.wait_for_credentials[0].triggers.config_hash
+    config_hash : time_sleep.wait_for_credentials.triggers.config_hash
   })
 }
 
